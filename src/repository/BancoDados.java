@@ -284,11 +284,21 @@ public boolean excluirUsuario(int id) {
 
 public boolean existeId(int id) {
 
-    for (Usuario usuario : usuarios) {
+    String sql = "SELECT id FROM usuarios WHERE id = ?";
 
-        if (usuario.getId() == id) {
-            return true;
-        }
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+
+        return rs.next();
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao verificar ID.");
+        System.out.println(e.getMessage());
 
     }
 
