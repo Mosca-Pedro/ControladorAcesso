@@ -1,0 +1,17 @@
+# VS Code
+.vscode/
+
+# Arquivos compilados
+bin/
+out/
+build/
+*.class
+
+# Arquivos de dados
+usuarios.txt
+src/usuarios.txt
+src/historico.txt
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
