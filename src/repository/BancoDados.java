@@ -307,11 +307,21 @@ public boolean existeId(int id) {
 
 public boolean existeCpf(String cpf) {
 
-    for (Usuario usuario : usuarios) {
+    String sql = "SELECT cpf FROM usuarios WHERE cpf = ?";
 
-        if (usuario.getCpf().equals(cpf)) {
-            return true;
-        }
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setString(1, cpf);
+
+        ResultSet rs = stmt.executeQuery();
+
+        return rs.next();
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao verificar CPF.");
+        System.out.println(e.getMessage());
 
     }
 
