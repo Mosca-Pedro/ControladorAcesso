@@ -174,11 +174,30 @@ private void salvarUsuarioNoArquivo(Usuario usuario) {
 
 public Usuario buscarUsuarioPorId(int id) {
 
-    for (Usuario usuario : usuarios) {
+    String sql = "SELECT * FROM usuarios WHERE id = ?";
 
-        if (usuario.getId() == id) {
-            return usuario;
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+
+            return new Usuario(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("cpf"),
+                    rs.getString("senha"),
+                    rs.getString("nivel_acesso"));
+
         }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao buscar usuário.");
+        System.out.println(e.getMessage());
 
     }
 
