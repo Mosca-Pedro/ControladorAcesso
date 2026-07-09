@@ -80,9 +80,39 @@ public class BancoDados {
 }    
 
     public ArrayList<Usuario> listarUsuarios() {
-        return usuarios;
+
+    ArrayList<Usuario> listaUsuarios = new ArrayList<>();
+
+    String sql = "SELECT * FROM usuarios";
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+
+            Usuario usuario = new Usuario(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("cpf"),
+                    rs.getString("senha"),
+                    rs.getString("nivel_acesso"));
+
+            listaUsuarios.add(usuario);
+
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao listar usuários.");
+        System.out.println(e.getMessage());
+
     }
 
+    return listaUsuarios;
+}
+
+    
     public Usuario fazerLogin(int id, String senha) {
 
     String sql = "SELECT * FROM usuarios WHERE id = ? AND senha = ?";
