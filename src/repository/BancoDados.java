@@ -232,6 +232,33 @@ public void salvarTodosUsuarios() {
     }
 }
 
+public boolean editarUsuario(Usuario usuario) {
+
+    String sql = "UPDATE usuarios SET nome = ?, cpf = ?, senha = ?, nivel_acesso = ? WHERE id = ?";
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setString(1, usuario.getNome());
+        stmt.setString(2, usuario.getCpf());
+        stmt.setString(3, usuario.getSenha());
+        stmt.setString(4, usuario.getNivelAcesso());
+        stmt.setInt(5, usuario.getId());
+
+        int linhasAfetadas = stmt.executeUpdate();
+
+        return linhasAfetadas > 0;
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao editar usuário.");
+        System.out.println(e.getMessage());
+
+    }
+
+    return false;
+}
+
 public boolean excluirUsuario(int id) {
 
     Usuario usuario = buscarUsuarioPorId(id);

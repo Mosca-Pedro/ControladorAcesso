@@ -196,33 +196,41 @@ public class Menu {
                 
                 case 7:
 
-                System.out.print("Digite o ID do usuário: ");
-                int idEditar = scanner.nextInt();
-                scanner.nextLine();
+    System.out.print("Digite o ID do usuário: ");
+    int idEditar = scanner.nextInt();
+    scanner.nextLine();
 
-                Usuario usuarioEditar = banco.buscarUsuarioPorId(idEditar);
+    Usuario usuarioEditar = banco.buscarUsuarioPorId(idEditar);
 
-            if (usuarioEditar == null) {
+    if (usuarioEditar == null) {
 
-                System.out.println("Usuário não encontrado.");
+        System.out.println("Usuário não encontrado.");
 
-                banco.salvarTodosUsuarios();
+    } else {
 
-            } else {
+        System.out.print("Novo nome: ");
+        usuarioEditar.setNome(scanner.nextLine());
 
-                System.out.print("Novo nome: ");
-                usuarioEditar.setNome(scanner.nextLine());
+        System.out.print("Novo CPF: ");
+        usuarioEditar.setCpf(scanner.nextLine());
 
-                System.out.print("Novo CPF: ");
-                usuarioEditar.setCpf(scanner.nextLine());
+        System.out.print("Nova senha: ");
+        usuarioEditar.setSenha(scanner.nextLine());
 
-                System.out.print("Nova senha: ");
-                usuarioEditar.setSenha(scanner.nextLine());
+        System.out.print("Novo nível de acesso: ");
+        usuarioEditar.setNivelAcesso(scanner.nextLine());
 
-                System.out.print("Novo nível de acesso: ");
-                usuarioEditar.setNivelAcesso(scanner.nextLine());
+        boolean atualizado = banco.editarUsuario(usuarioEditar);
 
-                System.out.println("Usuário atualizado com sucesso!");
+        if (atualizado) {
+
+            System.out.println("Usuário atualizado com sucesso!");
+
+        } else {
+
+            System.out.println("Erro ao atualizar usuário.");
+
+        }
 
     }
 
