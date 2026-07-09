@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import model.Usuario;
@@ -84,11 +85,32 @@ public class BancoDados {
 
     public Usuario fazerLogin(int id, String senha) {
 
-    for (Usuario usuario : usuarios) {
+    String sql = "SELECT * FROM usuarios WHERE id = ? AND senha = ?";
 
-        if (usuario.getId() == id && usuario.getSenha().equals(senha)) {
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, id);
+        stmt.setString(2, senha);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+
+            Usuario usuario = new Usuario(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("cpf"),
+                    rs.getString("senha"),
+                    rs.getString("nivel_acesso"));
+
             return usuario;
         }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao realizar login.");
+        System.out.println(e.getMessage());
 
     }
 
