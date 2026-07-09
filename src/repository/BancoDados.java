@@ -261,15 +261,22 @@ public boolean editarUsuario(Usuario usuario) {
 
 public boolean excluirUsuario(int id) {
 
-    Usuario usuario = buscarUsuarioPorId(id);
+    String sql = "DELETE FROM usuarios WHERE id = ?";
 
-    if (usuario != null) {
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-        usuarios.remove(usuario);
+        stmt.setInt(1, id);
 
-        salvarTodosUsuarios();
+        int linhasAfetadas = stmt.executeUpdate();
 
-        return true;
+        return linhasAfetadas > 0;
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao excluir usuário.");
+        System.out.println(e.getMessage());
+
     }
 
     return false;
