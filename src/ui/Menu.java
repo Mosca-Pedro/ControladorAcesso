@@ -1,13 +1,9 @@
 package ui;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDateTime;
+
 import java.util.Scanner;
 import model.Usuario;
 import repository.BancoDados;
+import repository.HistoricoRepository;
 import service.ControladorAcesso;
 
 
@@ -18,6 +14,8 @@ public class Menu {
 
     ControladorAcesso controlador = new ControladorAcesso();
     Usuario usuarioLogado = null;
+
+    HistoricoRepository historico = new HistoricoRepository();
 
     int tentativasLogin = 0;
 
@@ -160,7 +158,7 @@ public class Menu {
 
                     boolean permitido = controlador.verificarAcesso(usuarioLogado, sala);
 
-                    salvarHistorico(usuarioLogado.getNome(), sala, permitido);
+                    historico.salvarHistorico(usuarioLogado.getNome(), sala, permitido);
 
                 if (permitido) {
 
@@ -190,7 +188,7 @@ public class Menu {
 
                 case 6:
 
-                    mostrarHistorico();
+                   historico.listarHistorico();
 
                     break;
                 
@@ -283,51 +281,5 @@ public class Menu {
 
         } while (opcao != 5);
     }
-
-    private void salvarHistorico(String nome, String sala, boolean permitido) {
-
-    try {
-
-        BufferedWriter writer = new BufferedWriter(
-                new FileWriter("historico.txt", true));
-
-        String status = permitido ? "LIBERADO" : "NEGADO";
-
-        writer.write(LocalDateTime.now() + " - " +
-                nome + " - " +
-                sala + " - " +
-                status);
-
-        writer.newLine();
-
-        writer.close();
-
-    } catch (IOException e) {
-        System.out.println("Erro ao salvar histórico.");
-    }
-}
-
-private void mostrarHistorico() {
-
-    try {
-
-        BufferedReader reader = new BufferedReader(new FileReader("historico.txt"));
-
-        String linha;
-
-        System.out.println("\n===== HISTÓRICO DE ACESSOS =====");
-
-        while ((linha = reader.readLine()) != null) {
-            System.out.println(linha);
-        }
-
-        reader.close();
-
-        System.out.println("================================");
-
-    } catch (Exception e) {
-        System.out.println("Nenhum histórico encontrado.");
-    }
-}
 
 }
