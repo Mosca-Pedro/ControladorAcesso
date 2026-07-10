@@ -1,0 +1,3 @@
+db.url=jdbc:mysql://localhost:3306/controlador_acesso
+db.user=SEU_USUARIO
+db.password=SUA_SENHA

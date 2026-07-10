@@ -1,8 +1,11 @@
 package database;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Conexao {
 
@@ -10,16 +13,31 @@ public class Conexao {
 
         try {
 
+            Properties props = new Properties();
+
+            FileInputStream arquivo = new FileInputStream("config.properties");
+
+            props.load(arquivo);
+
+
+            String url = props.getProperty("db.url");
+            String usuario = props.getProperty("db.usuario");
+            String senha = props.getProperty("db.senha");
+
+
             Connection conexao = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/controlador_acesso",
-                    "root",
-                    "271121");
+                    url,
+                    usuario,
+                    senha
+            );
+
 
             System.out.println("Conexão realizada com sucesso!");
 
             return conexao;
 
-        } catch (SQLException e) {
+
+        } catch (SQLException | IOException e) {
 
             System.out.println("Erro ao conectar ao banco.");
             System.out.println(e.getMessage());
