@@ -5,14 +5,16 @@ public class Usuario {
     private int id;
     private String nome;
     private String cpf;
-    private String senha;
+     private String senha;
+    private String salt;
     private String nivelAcesso;
 
-    public Usuario(int id, String nome, String cpf, String senha, String nivelAcesso) {
+    public Usuario(int id, String nome, String cpf, String senha, String salt, String nivelAcesso) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.senha = senha;
+         this.senha = senha;
+        this.salt = salt;
         this.nivelAcesso = nivelAcesso;
     }
 
@@ -28,8 +30,8 @@ public class Usuario {
         return cpf;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getSalt() {
+        return salt;
     }
 
     public String getNivelAcesso() {
@@ -44,8 +46,16 @@ public class Usuario {
         this.cpf = cpf;
     }
 
+    public String getSenha() {
+    return senha;
+    }
+    
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public void setNivelAcesso(String nivelAcesso) {

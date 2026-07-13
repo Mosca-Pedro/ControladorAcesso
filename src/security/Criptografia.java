@@ -11,7 +11,6 @@ public class Criptografia {
     private static final int TAMANHO_HASH = 256;
     private static final int TAMANHO_SALT = 16;
 
-
     public static String gerarSalt() {
 
         byte[] salt = new byte[TAMANHO_SALT];
@@ -22,46 +21,43 @@ public class Criptografia {
         return Base64.getEncoder().encodeToString(salt);
     }
 
+    public static String criptografarSenha(String senha, String salt) {
 
-    public static String criptografarSenha(String senha, String salt) throws Exception {
+        try {
 
-        byte[] saltBytes = Base64.getDecoder().decode(salt);
+            byte[] saltBytes = Base64.getDecoder().decode(salt);
 
+            PBEKeySpec spec = new PBEKeySpec(
+                    senha.toCharArray(),
+                    saltBytes,
+                    ITERACOES,
+                    TAMANHO_HASH
+            );
 
-        PBEKeySpec spec = new PBEKeySpec(
-                senha.toCharArray(),
-                saltBytes,
-                ITERACOES,
-                TAMANHO_HASH
-        );
+            SecretKeyFactory factory =
+                    SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
 
+            byte[] hash = factory.generateSecret(spec).getEncoded();
 
-        SecretKeyFactory factory =
-                SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            return Base64.getEncoder().encodeToString(hash);
 
+        } catch (Exception e) {
 
-        byte[] hash = factory
-                .generateSecret(spec)
-                .getEncoded();
+            throw new RuntimeException("Erro ao criptografar a senha.", e);
 
-
-        return Base64.getEncoder().encodeToString(hash);
+        }
     }
-
 
     public static boolean verificarSenha(
             String senhaDigitada,
             String senhaBanco,
-            String salt
-    ) throws Exception {
-
+            String salt) {
 
         String novoHash = criptografarSenha(
                 senhaDigitada,
-                salt
-        );
-
+                salt);
 
         return novoHash.equals(senhaBanco);
     }
+
 }
