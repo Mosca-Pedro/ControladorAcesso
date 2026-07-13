@@ -20,6 +20,9 @@ public class Menu {
     int tentativasLogin = 0;
 
 
+    /**
+     * 
+     */
     public void exibirMenu() {
 
         int opcao;
@@ -86,10 +89,16 @@ public class Menu {
                     break;
 
 
-                    
-                
-
                 case 2:
+
+                        if (tentativasLogin >= 3) {
+
+                            System.out.println("\n=================================");
+                            System.out.println("Sistema Bloqueado!");
+                            System.out.println("Reinicie o programa para tentar novamente.");
+                            System.out.println("=================================");
+                            break;
+                }
 
                     System.out.print("ID: ");
                     int idLogin = scanner.nextInt();
@@ -117,18 +126,18 @@ public class Menu {
                         System.out.println("\nID ou senha inválidos.");
                         System.out.println("Tentativa " + tentativasLogin + " de 3.");
 
+                    if (tentativasLogin >= 3) {
+
+
+                        System.out.println("\n=================================");
+                        System.out.println("Sistema Bloqueado!");
+                        System.out.println("Você excedeu o número de tentativas.");
+                        System.out.println("=================================");
 
                     }
 
-                    if (tentativasLogin >= 3) {
-
-                        System.out.println("\n=================================");
-                        System.out.println("LOGIN BLOQUEADO!");
-                        System.out.println("Você excedeu o número de tentativas.");
-                        System.out.println("=================================");
-}
-
-                    break;
+                }
+                break;
 
                 case 3:
 
@@ -140,7 +149,7 @@ public class Menu {
                             System.out.println("---------------------------");
                         }
 
-    break;
+                        break;
 
                 case 4:
 
@@ -182,9 +191,6 @@ public class Menu {
                 case 5:
                     System.out.println("Sistema encerrado.");
                     break;
-
-                default:
-                    System.out.println("Opção inválida.");
 
                 case 6:
 
@@ -274,7 +280,10 @@ public class Menu {
             }
 
     break;
-                
+
+        default:
+            System.out.println("Opção inválida.");
+            break;  
                
 
     }
