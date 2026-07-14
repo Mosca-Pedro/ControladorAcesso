@@ -22,10 +22,6 @@ public class Menu {
 
     int tentativasLogin = 0;
 
-
-    /**
-     * 
-     */
     public void exibirMenu() {
 
         int opcao;
@@ -44,7 +40,6 @@ public class Menu {
             System.out.println("7 - Editar usuário");
             System.out.println("8 - Excluir usuário");
             System.out.println("9 - Buscar usuário");
-            System.out.println("9 - Buscar usuário");
             System.out.println("10 - Sair");
            
 
@@ -53,6 +48,20 @@ public class Menu {
             switch (opcao) {
 
                 case 1:
+
+                    if (usuarioLogado == null) {
+
+                        System.out.println("Faça login primeiro!");
+                break;
+
+            }
+
+            if (!controlador.temPermissao(usuarioLogado, 1)) {
+
+                System.out.println("Você não possui permissão para cadastrar usuários.");
+                break;
+
+            }
 
                     scanner.nextLine();
 
@@ -145,6 +154,14 @@ public class Menu {
 
                 case 3:
 
+
+                    if (!controlador.temPermissao(usuarioLogado, 3)) {
+
+                        System.out.println("Você não possui permissão para listar usuários.");
+                        break;
+
+                    }
+
                         System.out.println("\n===== USUÁRIOS CADASTRADOS =====");
 
                         for (Usuario usuarioLista : banco.listarUsuarios()) {
@@ -190,6 +207,13 @@ public class Menu {
 
                case 6:
 
+                    if (!controlador.temPermissao(usuarioLogado, 6)) {
+
+                        System.out.println("Você não possui permissão para visualizar o histórico.");
+                        break;
+
+                    }
+
                     System.out.println("\n===== HISTÓRICO DE ACESSOS =====");
 
                     for (RegistroAcesso acesso : acessoService.listarAcessos()) {
@@ -205,47 +229,62 @@ public class Menu {
                 
                 case 7:
 
-    System.out.print("Digite o ID do usuário: ");
-    int idEditar = scanner.nextInt();
-    scanner.nextLine();
 
-    Usuario usuarioEditar = banco.buscarUsuarioPorId(idEditar);
+                    if (!controlador.temPermissao(usuarioLogado, 7)) {
 
-    if (usuarioEditar == null) {
+                        System.out.println("Você não possui permissão para editar usuários.");
+                        break;
 
-        System.out.println("Usuário não encontrado.");
+                    }
 
-    } else {
+                    System.out.print("Digite o ID do usuário: ");
+                    int idEditar = scanner.nextInt();
+                    scanner.nextLine();
 
-        System.out.print("Novo nome: ");
-        usuarioEditar.setNome(scanner.nextLine());
+                    Usuario usuarioEditar = banco.buscarUsuarioPorId(idEditar);
 
-        System.out.print("Novo CPF: ");
-        usuarioEditar.setCpf(scanner.nextLine());
+                    if (usuarioEditar == null) {
 
-        System.out.print("Nova senha: ");
-        usuarioEditar.setSenha(scanner.nextLine());
+                        System.out.println("Usuário não encontrado.");
 
-        System.out.print("Novo nível de acesso: ");
-        usuarioEditar.setNivelAcesso(scanner.nextLine());
+                    } else {
 
-        boolean atualizado = banco.editarUsuario(usuarioEditar);
+                        System.out.print("Novo nome: ");
+                        usuarioEditar.setNome(scanner.nextLine());
 
-        if (atualizado) {
+                        System.out.print("Novo CPF: ");
+                        usuarioEditar.setCpf(scanner.nextLine());
 
-            System.out.println("Usuário atualizado com sucesso!");
+                        System.out.print("Nova senha: ");
+                        usuarioEditar.setSenha(scanner.nextLine());
 
-        } else {
+                        System.out.print("Novo nível de acesso: ");
+                        usuarioEditar.setNivelAcesso(scanner.nextLine());
 
-            System.out.println("Erro ao atualizar usuário.");
+                        boolean atualizado = banco.editarUsuario(usuarioEditar);
 
-        }
+                    if (atualizado) {
 
-    }
+                        System.out.println("Usuário atualizado com sucesso!");
 
-    break;
+                    } else {
+
+                        System.out.println("Erro ao atualizar usuário.");
+
+                    }
+
+                }
+
+                break;
 
                 case 8:
+
+                    if (!controlador.temPermissao(usuarioLogado, 8)) {
+
+                        System.out.println("Você não possui permissão para excluir usuários.");
+                        break;
+
+                    }
 
                     System.out.print("Digite o ID do usuário que deseja excluir: ");
                     int idExcluir = scanner.nextInt();
@@ -253,19 +292,26 @@ public class Menu {
 
                     boolean removido = banco.excluirUsuario(idExcluir);
 
-                if (removido) {
+                    if (removido) {
 
-                    System.out.println("Usuário excluído com sucesso!");
+                        System.out.println("Usuário excluído com sucesso!");
 
-                } else {
+                    }else {
 
-                     System.out.println("Usuário não encontrado.");
+                        System.out.println("Usuário não encontrado.");
 
-            }
+                    }
 
-    break;
+                    break;
 
                 case 9:
+
+                    if (!controlador.temPermissao(usuarioLogado, 9)) {
+
+                        System.out.println("Você não possui permissão para buscar usuários.");
+                        break;
+
+                    }
 
                     System.out.print("Digite o ID do usuário: ");
                     int idBusca = scanner.nextInt();
