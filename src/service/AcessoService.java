@@ -26,7 +26,7 @@ public class AcessoService {
                     "ENTRADA"
             );
 
-        repository.registrarEntrada(acesso);
+      repository.registrarAcesso(acesso);
     }
 
     public void registrarSaida(int usuarioId) {
@@ -40,8 +40,7 @@ public class AcessoService {
             );
 
 
-    repository.registrarSaida(acesso);
-
+   repository.registrarAcesso(acesso);
 }
 
 }

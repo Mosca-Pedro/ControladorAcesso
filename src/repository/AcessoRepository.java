@@ -10,42 +10,7 @@ import model.RegistroAcesso;
 public class AcessoRepository {
 
 
-    public void registrarEntrada(RegistroAcesso acesso) {
-
-
-        String sql = """
-                INSERT INTO registros_acesso
-                (usuario_id, data_hora, tipo)
-                VALUES (?, ?, ?)
-                """;
-
-
-        try(Connection conexao = Conexao.conectar();
-            PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
-
-            stmt.setInt(1, acesso.getUsuarioId());
-
-            stmt.setObject(2, acesso.getDataHora());
-
-            stmt.setString(3, acesso.getTipo());
-
-
-            stmt.executeUpdate();
-
-
-            System.out.println("Entrada registrada com sucesso!");
-
-
-        } catch(SQLException e) {
-
-            System.out.println("Erro ao registrar entrada.");
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void registrarSaida(RegistroAcesso acesso) {
-
+   public void registrarAcesso(RegistroAcesso acesso) {
 
     String sql = """
             INSERT INTO registros_acesso
@@ -53,27 +18,20 @@ public class AcessoRepository {
             VALUES (?, ?, ?)
             """;
 
-
-    try(Connection conexao = Conexao.conectar();
-        PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
         stmt.setInt(1, acesso.getUsuarioId());
-
         stmt.setObject(2, acesso.getDataHora());
-
         stmt.setString(3, acesso.getTipo());
-
 
         stmt.executeUpdate();
 
+        System.out.println(acesso.getTipo() + " registrada com sucesso!");
 
-        System.out.println("Saída registrada com sucesso!");
+    } catch (SQLException e) {
 
-
-    } catch(SQLException e) {
-
-        System.out.println("Erro ao registrar saída.");
+        System.out.println("Erro ao registrar acesso.");
         System.out.println(e.getMessage());
     }
 }
