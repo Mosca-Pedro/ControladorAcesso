@@ -1,6 +1,7 @@
 package ui;
 
 import java.util.Scanner;
+import model.RegistroAcesso;
 import model.Usuario;
 import repository.BancoDados;
 import repository.HistoricoRepository;
@@ -187,11 +188,20 @@ public class Menu {
 
                 break;
 
-                case 6:
+               case 6:
 
-                   historico.listarHistorico();
+                    System.out.println("\n===== HISTÓRICO DE ACESSOS =====");
 
-                    break;
+                    for (RegistroAcesso acesso : acessoService.listarAcessos()) {
+
+                    System.out.println("---------------------------");
+                    System.out.println("Usuário: " + acesso.getNomeUsuario());
+                    System.out.println("Data/Hora : " + acesso.getDataHora());
+                    System.out.println("Tipo      : " + acesso.getTipo());
+
+            }
+
+            break;
                 
                 case 7:
 

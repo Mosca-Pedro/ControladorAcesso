@@ -1,6 +1,7 @@
 package service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import model.RegistroAcesso;
 import repository.AcessoRepository;
 
@@ -41,6 +42,11 @@ public class AcessoService {
 
 
    repository.registrarAcesso(acesso);
+}
+    public ArrayList<RegistroAcesso> listarAcessos() {
+
+    return repository.listarAcessos();
+
 }
 
 }

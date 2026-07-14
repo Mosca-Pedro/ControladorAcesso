@@ -3,8 +3,11 @@ package repository;
 import database.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import model.RegistroAcesso;
+
 
 
 public class AcessoRepository {
@@ -34,5 +37,44 @@ public class AcessoRepository {
         System.out.println("Erro ao registrar acesso.");
         System.out.println(e.getMessage());
     }
+}
+    public ArrayList<RegistroAcesso> listarAcessos() {
+
+    ArrayList<RegistroAcesso> lista = new ArrayList<>();
+
+     String sql = """
+        SELECT
+            u.nome,
+            r.data_hora,
+            r.tipo
+        FROM registros_acesso r
+        INNER JOIN usuarios u
+            ON r.usuario_id = u.id
+        ORDER BY r.data_hora DESC
+        """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+
+            RegistroAcesso acesso = new RegistroAcesso(
+                rs.getString("nome"),
+                rs.getTimestamp("data_hora").toLocalDateTime(),
+                rs.getString("tipo")
+            );
+
+            lista.add(acesso);
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao listar acessos.");
+        System.out.println(e.getMessage());
+
+    }
+
+    return lista;
 }
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class RegistroAcesso {
 
     private int usuarioId;
+    private String nomeUsuario;
     private LocalDateTime dataHora;
     private String tipo;
 
@@ -16,9 +17,20 @@ public class RegistroAcesso {
         this.tipo = tipo;
     }
 
+    public RegistroAcesso(String nomeUsuario, LocalDateTime dataHora, String tipo) {
+
+    this.nomeUsuario = nomeUsuario;
+    this.dataHora = dataHora;
+    this.tipo = tipo;
+}
+
 
     public int getUsuarioId() {
         return usuarioId;
+    }
+
+    public String getNomeUsuario() {
+    return nomeUsuario;
     }
 
 
