@@ -15,7 +15,11 @@ public class BancoDados {
 }
     public void cadastrarUsuario(Usuario usuario) {
 
-    String sql = "INSERT INTO usuarios (id, nome, cpf, senha_hash, salt, nivel_acesso)";
+   String sql = """
+        INSERT INTO usuarios 
+        (id, nome, cpf, senha_hash, salt, nivel_acesso)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """;
 
     String salt = Criptografia.gerarSalt();
 
@@ -64,8 +68,7 @@ public class BancoDados {
                     rs.getString("nome"),
                     rs.getString("cpf"),
                     rs.getString("senha_hash"),
-                    rs.getString("salt"),
-                    rs.getString("nivel_acesso"));
+                    rs.getString("salt"));
 
             listaUsuarios.add(usuario);
         }
@@ -106,15 +109,16 @@ public class BancoDados {
             if (senhaCorreta) {
 
                 return new Usuario(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("cpf"),
-                        null,
-                        rs.getString("salt"),
-                        rs.getString("nivel_acesso"));
-            }
-
-        }
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("cpf"),
+                    rs.getString("senha_hash"),
+                    rs.getString("salt"),
+                    rs.getString("nivel_acesso")
+                ); 
+              
+            }  
+    }
 
     } catch (SQLException e) {
 
@@ -144,8 +148,7 @@ public Usuario buscarUsuarioPorId(int id) {
                     rs.getString("nome"),
                     rs.getString("cpf"),
                     rs.getString("senha_hash"),
-                    rs.getString("salt"),
-                    rs.getString("nivel_acesso"));
+                    rs.getString("salt"));
         }
 
     } catch (SQLException e) {

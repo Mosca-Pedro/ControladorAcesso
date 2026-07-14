@@ -4,6 +4,7 @@ import java.util.Scanner;
 import model.Usuario;
 import repository.BancoDados;
 import repository.HistoricoRepository;
+import service.AcessoService;
 import service.ControladorAcesso;
 
 
@@ -16,6 +17,7 @@ public class Menu {
     Usuario usuarioLogado = null;
 
     HistoricoRepository historico = new HistoricoRepository();
+    AcessoService acessoService = new AcessoService();
 
     int tentativasLogin = 0;
 
@@ -35,13 +37,14 @@ public class Menu {
             System.out.println("1 - Cadastrar usuário");
             System.out.println("2 - Login");
             System.out.println("3 - Listar usuários");
-            System.out.println("4 - Registrar acesso");
-            System.out.println("5 - Sair");
+            System.out.println("4 - Registrar entrada");
+            System.out.println("5 - Registrar saída");
             System.out.println("6 - Ver histórico de acessos");
             System.out.println("7 - Editar usuário");
             System.out.println("8 - Excluir usuário");
             System.out.println("9 - Buscar usuário");
-            System.out.print("Escolha uma opção: ");
+            System.out.println("9 - Buscar usuário");
+            System.out.println("10 - Sair");
            
 
             opcao = scanner.nextInt();
@@ -156,41 +159,33 @@ public class Menu {
                     if (usuarioLogado == null) {
 
                         System.out.println("Faça login primeiro!");
-                         break;
-
-                    }
-
-                    scanner.nextLine();
-
-                    System.out.print("Digite a sala que deseja acessar: ");
-                    String sala = scanner.nextLine();
-
-                    boolean permitido = controlador.verificarAcesso(usuarioLogado, sala);
-
-                    historico.salvarHistorico(usuarioLogado.getNome(), sala, permitido);
-
-                if (permitido) {
-
-                    System.out.println("\n=================================");
-                    System.out.println("ACESSO LIBERADO!");
-                    System.out.println("Usuário: " + usuarioLogado.getNome());
-                    System.out.println("Sala: " + sala);
-                    System.out.println("=================================");
-
-                } else {
-
-                    System.out.println("\n=================================");
-                    System.out.println("ACESSO NEGADO!");
-                    System.out.println("Usuário: " + usuarioLogado.getNome());
-                    System.out.println("Sala: " + sala);
-                    System.out.println("=================================");
-
-            }
-
-             break;
-                case 5:
-                    System.out.println("Sistema encerrado.");
                     break;
+
+                }
+
+
+                acessoService.registrarEntrada(
+                    usuarioLogado.getId()
+                );
+
+
+                break;
+                case 5:
+
+                    if (usuarioLogado == null) {
+
+                        System.out.println("Faça login primeiro!");
+                break;
+
+                }
+
+
+                    acessoService.registrarSaida(
+                        usuarioLogado.getId()
+                    );
+
+
+                break;
 
                 case 6:
 
@@ -280,6 +275,11 @@ public class Menu {
             }
 
     break;
+            case 10:
+
+                System.out.println("Sistema encerrado.");
+
+            break;
 
         default:
             System.out.println("Opção inválida.");
@@ -288,7 +288,7 @@ public class Menu {
 
     }
 
-        } while (opcao != 5);
+        } while (opcao != 10);
     }
 
 }
