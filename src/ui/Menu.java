@@ -1,5 +1,8 @@
 package ui;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Scanner;
 import model.RegistroAcesso;
 import model.Usuario;
@@ -205,27 +208,96 @@ public class Menu {
 
                 break;
 
-               case 6:
+              case 6:
 
-                    if (!controlador.temPermissao(usuarioLogado, 6)) {
+                System.out.println("\n===== HISTÓRICO DE ACESSOS =====");
+                System.out.println("1 - Mostrar todo o histórico");
+                System.out.println("2 - Buscar por usuário");
+                System.out.println("3 - Buscar por tipo");
+                System.out.println("4 - Buscar por período");
+                System.out.print("Escolha uma opção: ");
 
-                        System.out.println("Você não possui permissão para visualizar o histórico.");
-                        break;
+                int opcaoHistorico = scanner.nextInt();
+                scanner.nextLine();
 
-                    }
+                switch (opcaoHistorico) {
 
-                    System.out.println("\n===== HISTÓRICO DE ACESSOS =====");
+                case 1:
 
                     for (RegistroAcesso acesso : acessoService.listarAcessos()) {
 
+                        System.out.println("---------------------------");
+                        System.out.println("Usuário  : " + acesso.getNomeUsuario());
+                        System.out.println("Data/Hora: " + acesso.getDataHora());
+                        System.out.println("Tipo     : " + acesso.getTipo());
+
+                    }
+
+                    break;
+
+                case 2:
+
+                    System.out.print("Digite o nome do usuário: ");
+                    nome = scanner.nextLine();
+
+                    for (RegistroAcesso acesso :
+                    acessoService.listarAcessosPorUsuario(nome)) {
+
                     System.out.println("---------------------------");
-                    System.out.println("Usuário: " + acesso.getNomeUsuario());
-                    System.out.println("Data/Hora : " + acesso.getDataHora());
-                    System.out.println("Tipo      : " + acesso.getTipo());
+                    System.out.println("Usuário  : " + acesso.getNomeUsuario());
+                    System.out.println("Data/Hora: " + acesso.getDataHora());
+                    System.out.println("Tipo     : " + acesso.getTipo());
 
-            }
+                }
 
-            break;
+                break;
+
+                   case 3:
+
+                    System.out.print("Digite o tipo (ENTRADA ou SAIDA): ");
+                    String tipo = scanner.nextLine();
+
+                for (RegistroAcesso acesso :
+                    acessoService.listarAcessosPorTipo(tipo)) {
+
+                    System.out.println("---------------------------");
+                    System.out.println("Usuário  : " + acesso.getNomeUsuario());
+                    System.out.println("Data/Hora: " + acesso.getDataHora());
+                    System.out.println("Tipo     : " + acesso.getTipo());
+
+                }
+
+                break; 
+
+                    case 4:
+
+                        System.out.print("Data inicial (AAAA-MM-DD): ");
+                        LocalDate dataInicial = LocalDate.parse(scanner.nextLine());
+
+                        System.out.print("Data final (AAAA-MM-DD): ");
+                        LocalDate dataFinal = LocalDate.parse(scanner.nextLine());
+
+                        LocalDateTime inicio = dataInicial.atStartOfDay();
+                        LocalDateTime fim = dataFinal.atTime(LocalTime.MAX);
+
+                    for (RegistroAcesso acesso :
+                        acessoService.listarAcessosPorPeriodo(inicio, fim)) {
+
+                        System.out.println("---------------------------");
+                        System.out.println("Usuário  : " + acesso.getNomeUsuario());
+                        System.out.println("Data/Hora: " + acesso.getDataHora());
+                        System.out.println("Tipo     : " + acesso.getTipo());
+
+                    }
+
+                    break;
+
+                default:
+
+                    System.out.println("Opção inválida.");
+                }
+
+                break;
                 
                 case 7:
 

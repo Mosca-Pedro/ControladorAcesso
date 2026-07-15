@@ -49,4 +49,24 @@ public class AcessoService {
 
 }
 
+    public ArrayList<RegistroAcesso> listarAcessosPorUsuario(String nome) {
+
+    return repository.listarAcessosPorUsuario(nome);
+
+}
+
+    public ArrayList<RegistroAcesso> listarAcessosPorTipo(String tipo) {
+
+    return repository.listarAcessosPorTipo(tipo);
+
+}
+
+    public ArrayList<RegistroAcesso> listarAcessosPorPeriodo(
+        LocalDateTime inicio,
+        LocalDateTime fim) {
+
+    return repository.listarAcessosPorPeriodo(inicio, fim);
+
+}
+
 }
