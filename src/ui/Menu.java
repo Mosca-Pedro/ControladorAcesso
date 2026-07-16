@@ -465,6 +465,24 @@ public class Menu {
                     break;
                 }
 
+                Usuario usuarioRecuperacao = banco.buscarPerguntaSecreta(cpfRecuperacao);
+
+                if (usuarioRecuperacao == null || usuarioRecuperacao.getPerguntaSecreta() == null) {
+
+                    System.out.println("Este usuário não possui pergunta secreta cadastrada.");
+                    break;
+                }
+
+                System.out.println("Pergunta secreta: " + usuarioRecuperacao.getPerguntaSecreta());
+                System.out.print("Resposta: ");
+                String respostaRecuperacao = scanner.nextLine();
+
+                if (!banco.validarRespostaSecreta(cpfRecuperacao, respostaRecuperacao)) {
+
+                    System.out.println("Resposta incorreta.");
+                    break;
+                }
+
                 System.out.print("Nova senha: ");
                 String novaSenha = scanner.nextLine();
 
@@ -479,12 +497,6 @@ public class Menu {
                 }
 
                 break;
-
-            case 12:
-
-                System.out.println("Sistema encerrado.");
-
-            break;
 
 
         default:

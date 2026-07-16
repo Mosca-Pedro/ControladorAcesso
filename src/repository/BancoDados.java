@@ -319,5 +319,65 @@ public boolean existeCpf(String cpf) {
     return false;
 }
 
+    public Usuario buscarPerguntaSecreta(String cpf) {
+
+    String sql = "SELECT id, nome, cpf, pergunta_secreta FROM usuarios WHERE cpf = ?";
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setString(1, cpf);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+
+            Usuario usuario = new Usuario(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("cpf"),
+                    null,
+                    null);
+            usuario.setPerguntaSecreta(rs.getString("pergunta_secreta"));
+            return usuario;
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao buscar pergunta secreta.");
+        System.out.println(e.getMessage());
+
+    }
+
+    return null;
+}
+
+    public boolean validarRespostaSecreta(String cpf, String resposta) {
+
+    String sql = "SELECT resposta_secreta FROM usuarios WHERE cpf = ?";
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setString(1, cpf);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            String respostaBanco = rs.getString("resposta_secreta");
+            return respostaBanco != null &&
+                   respostaBanco.trim().equalsIgnoreCase(resposta.trim());
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao validar resposta secreta.");
+        System.out.println(e.getMessage());
+
+    }
+
+    return false;
+}
+
 }
 
