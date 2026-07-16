@@ -13,43 +13,6 @@ public class BancoDados {
 
     public BancoDados() {
 }
-    public void cadastrarUsuario(Usuario usuario) {
-
-   String sql = """
-        INSERT INTO usuarios 
-        (id, nome, cpf, senha_hash, salt, nivel_acesso)
-        VALUES (?, ?, ?, ?, ?, ?)
-        """;
-
-    String salt = Criptografia.gerarSalt();
-
-    String senhaCriptografada = Criptografia.criptografarSenha(
-            usuario.getSenha(),
-            salt);
-
-    try (Connection conexao = Conexao.conectar();
-         PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
-        stmt.setInt(1, usuario.getId());
-        stmt.setString(2, usuario.getNome());
-        stmt.setString(3, usuario.getCpf());
-        stmt.setString(4, senhaCriptografada);
-        stmt.setString(5, salt);
-        stmt.setString(6, usuario.getNivelAcesso());
-
-        stmt.executeUpdate();
-
-
-
-        System.out.println("Usuário cadastrado com sucesso no MySQL!");
-
-    } catch (SQLException e) {
-
-        System.out.println("Erro ao cadastrar usuário.");
-        System.out.println(e.getMessage());
-
-    }
-}  
 
     public ArrayList<Usuario> listarUsuarios() {
 
@@ -130,7 +93,7 @@ public class BancoDados {
     return null;
 }
 
-public Usuario buscarUsuarioPorId(int id) {
+    public Usuario buscarUsuarioPorId(int id) {
 
     String sql = "SELECT * FROM usuarios WHERE id = ?";
 
@@ -159,6 +122,44 @@ public Usuario buscarUsuarioPorId(int id) {
     }
 
     return null;
+}
+
+    public void cadastrarUsuario(Usuario usuario) {
+
+    String sql = """
+        INSERT INTO usuarios 
+        (id, nome, cpf, senha_hash, salt, nivel_acesso, pergunta_secreta, resposta_secreta)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+    String salt = Criptografia.gerarSalt();
+
+    String senhaCriptografada = Criptografia.criptografarSenha(
+            usuario.getSenha(),
+            salt);
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, usuario.getId());
+        stmt.setString(2, usuario.getNome());
+        stmt.setString(3, usuario.getCpf());
+        stmt.setString(4, senhaCriptografada);
+        stmt.setString(5, salt);
+        stmt.setString(6, usuario.getNivelAcesso());
+        stmt.setString(7, usuario.getPerguntaSecreta());
+        stmt.setString(8, usuario.getRespostaSecreta());
+
+        stmt.executeUpdate();
+
+        System.out.println("Usuário cadastrado com sucesso no MySQL!");
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao cadastrar usuário.");
+        System.out.println(e.getMessage());
+
+    }
 }
 
 public boolean editarUsuario(Usuario usuario) {

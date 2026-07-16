@@ -97,7 +97,21 @@ public class Menu {
                     System.out.print("Nível de acesso (Administrador/Funcionário/Visitante): ");
                     String nivel = scanner.nextLine();
 
-                    Usuario usuario = new Usuario(id, nome, cpf, senha, nivel);
+                    System.out.print("Pergunta secreta: ");
+                    String perguntaSecreta = scanner.nextLine();
+
+                    System.out.print("Resposta secreta: ");
+                    String respostaSecreta = scanner.nextLine();
+
+                    Usuario usuario = new Usuario(
+                        id,
+                        nome,
+                        cpf,
+                        senha,
+                        nivel,
+                        perguntaSecreta,
+                        respostaSecreta
+                    );
 
                     banco.cadastrarUsuario(usuario);
 
