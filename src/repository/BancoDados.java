@@ -241,6 +241,31 @@ public boolean existeId(int id) {
     return false;
 }
 
+public boolean existeAdministrador() {
+
+    String sql = """
+            SELECT COUNT(*)
+            FROM usuarios
+            WHERE nivel_acesso = 'Administrador'
+            """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao verificar administradores.");
+        System.out.println(e.getMessage());
+    }
+
+    return false;
+}
+
 public boolean existeCpf(String cpf) {
 
     String sql = "SELECT cpf FROM usuarios WHERE cpf = ?";

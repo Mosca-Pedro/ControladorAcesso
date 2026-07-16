@@ -4,12 +4,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Scanner;
+import model.Dashboard;
 import model.RegistroAcesso;
 import model.Usuario;
 import repository.BancoDados;
 import repository.HistoricoRepository;
 import service.AcessoService;
 import service.ControladorAcesso;
+import service.DashboardService;
 
 
 public class Menu {
@@ -22,6 +24,8 @@ public class Menu {
 
     HistoricoRepository historico = new HistoricoRepository();
     AcessoService acessoService = new AcessoService();
+
+    DashboardService dashboardService = new DashboardService();
 
     int tentativasLogin = 0;
 
@@ -43,7 +47,8 @@ public class Menu {
             System.out.println("7 - Editar usuário");
             System.out.println("8 - Excluir usuário");
             System.out.println("9 - Buscar usuário");
-            System.out.println("10 - Sair");
+            System.out.println("10 - Dashboard");
+            System.out.println("11 - Sair");
            
 
             opcao = scanner.nextInt();
@@ -52,19 +57,12 @@ public class Menu {
 
                 case 1:
 
-                    if (usuarioLogado == null) {
+                if (usuarioLogado != null &&
+                !controlador.temPermissao(usuarioLogado, 1)) {
 
-                        System.out.println("Faça login primeiro!");
-                break;
-
-            }
-
-            if (!controlador.temPermissao(usuarioLogado, 1)) {
-
-                System.out.println("Você não possui permissão para cadastrar usuários.");
-                break;
-
-            }
+                    System.out.println("Você não possui permissão para cadastrar usuários.");
+                    break;
+                }
 
                     scanner.nextLine();
 
@@ -224,16 +222,20 @@ public class Menu {
 
                 case 1:
 
-                    for (RegistroAcesso acesso : acessoService.listarAcessos()) {
+                     if (banco.existeAdministrador()) {
 
-                        System.out.println("---------------------------");
-                        System.out.println("Usuário  : " + acesso.getNomeUsuario());
-                        System.out.println("Data/Hora: " + acesso.getDataHora());
-                        System.out.println("Tipo     : " + acesso.getTipo());
+                        if (usuarioLogado == null) {
 
+                            System.out.println("Faça login como administrador.");
+                            break;
+                        }
+
+                        if (!controlador.temPermissao(usuarioLogado, 1)) {
+
+                            System.out.println("Você não possui permissão para cadastrar usuários.");
+                        break;
                     }
-
-                    break;
+                }
 
                 case 2:
 
@@ -402,12 +404,43 @@ public class Menu {
 
             }
 
-    break;
+            break;
+
             case 10:
+
+                Dashboard dashboard = dashboardService.obterDashboard();
+
+                System.out.println("\n=================================");
+                System.out.println("          DASHBOARD");
+                System.out.println("=================================");
+
+                System.out.println("Total de usuários : " + dashboard.getTotalUsuarios());
+
+                System.out.println();
+
+                System.out.println("Administradores   : " + dashboard.getAdministradores());
+                System.out.println("Funcionários      : " + dashboard.getFuncionarios());
+                System.out.println("Visitantes        : " + dashboard.getVisitantes());
+
+                System.out.println();
+
+                System.out.println("Entradas          : " + dashboard.getTotalEntradas());
+                System.out.println("Saídas            : " + dashboard.getTotalSaidas());
+
+                System.out.println();
+
+                System.out.println("Acessos hoje      : " + dashboard.getAcessosHoje());
+
+                System.out.println("=================================");
+
+            break;
+
+            case 11:
 
                 System.out.println("Sistema encerrado.");
 
             break;
+
 
         default:
             System.out.println("Opção inválida.");
@@ -416,7 +449,7 @@ public class Menu {
 
     }
 
-        } while (opcao != 10);
+        } while (opcao != 11);
     }
 
 }
