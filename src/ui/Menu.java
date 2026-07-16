@@ -48,7 +48,8 @@ public class Menu {
             System.out.println("8 - Excluir usuário");
             System.out.println("9 - Buscar usuário");
             System.out.println("10 - Dashboard");
-            System.out.println("11 - Sair");
+            System.out.println("11 - Recuperar senha");
+            System.out.println("12 - Sair");
            
 
             opcao = scanner.nextInt();
@@ -437,6 +438,36 @@ public class Menu {
 
             case 11:
 
+                scanner.nextLine();
+
+                System.out.println("\n===== RECUPERAÇÃO DE SENHA =====");
+
+                System.out.print("CPF: ");
+                String cpfRecuperacao = scanner.nextLine();
+
+                if (!banco.existeCpf(cpfRecuperacao)) {
+
+                    System.out.println("CPF não encontrado.");
+                    break;
+                }
+
+                System.out.print("Nova senha: ");
+                String novaSenha = scanner.nextLine();
+
+                if (banco.redefinirSenha(cpfRecuperacao, novaSenha)) {
+
+                    System.out.println("Senha redefinida com sucesso!");
+
+                } else {
+
+                    System.out.println("Erro ao redefinir senha.");
+
+                }
+
+                break;
+
+            case 12:
+
                 System.out.println("Sistema encerrado.");
 
             break;
@@ -449,7 +480,7 @@ public class Menu {
 
     }
 
-        } while (opcao != 11);
+        } while (opcao != 12);
     }
 
 }

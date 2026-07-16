@@ -289,5 +289,34 @@ public boolean existeCpf(String cpf) {
     return false;
 }
 
+    public boolean redefinirSenha(String cpf, String novaSenha) {
+
+    String novoSalt = Criptografia.gerarSalt();
+    String senhaHash = Criptografia.criptografarSenha(novaSenha, novoSalt);
+
+    String sql = """
+            UPDATE usuarios
+            SET senha_hash = ?, salt = ?
+            WHERE cpf = ?
+            """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setString(1, senhaHash);
+        stmt.setString(2, novoSalt);
+        stmt.setString(3, cpf);
+
+        return stmt.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao redefinir senha.");
+        System.out.println(e.getMessage());
+    }
+
+    return false;
+}
+
 }
 
