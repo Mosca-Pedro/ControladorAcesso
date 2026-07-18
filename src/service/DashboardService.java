@@ -23,4 +23,8 @@ public class DashboardService {
     return repository.usuarioComMaisAcessos();
 }
 
+    public String ultimoAcesso() {
+        return repository.ultimoAcesso();
+    }
+
 }

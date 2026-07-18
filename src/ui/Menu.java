@@ -443,6 +443,8 @@ public class Menu {
                 System.out.println("Acessos hoje      : " + dashboard.getAcessosHoje());
                 System.out.println("Usuário com mais acessos: "
                     + dashboardService.usuarioComMaisAcessos());
+                System.out.println("Último acesso      : "
+                    + dashboardService.ultimoAcesso());
                 System.out.println("=================================");
 
             break;

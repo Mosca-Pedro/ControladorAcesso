@@ -113,4 +113,37 @@ public class DashboardRepository {
     return "Nenhum acesso registrado";
 }
 
+public String ultimoAcesso() {
+
+    String sql = """
+            SELECT u.nome, r.data_hora, r.tipo
+            FROM registros_acesso r
+            INNER JOIN usuarios u
+                ON r.usuario_id = u.id
+            ORDER BY r.data_hora DESC
+            LIMIT 1
+            """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+
+            return rs.getString("nome") +
+                   " - " +
+                   rs.getString("tipo") +
+                   " - " +
+                   rs.getTimestamp("data_hora").toLocalDateTime();
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao buscar último acesso.");
+        System.out.println(e.getMessage());
+    }
+
+    return "Nenhum acesso registrado";
+}
+
 }
