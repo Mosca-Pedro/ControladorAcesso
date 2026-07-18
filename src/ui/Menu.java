@@ -436,16 +436,13 @@ public class Menu {
                 System.out.println("Administradores   : " + dashboard.getAdministradores());
                 System.out.println("Funcionários      : " + dashboard.getFuncionarios());
                 System.out.println("Visitantes        : " + dashboard.getVisitantes());
-
                 System.out.println();
-
                 System.out.println("Entradas          : " + dashboard.getTotalEntradas());
                 System.out.println("Saídas            : " + dashboard.getTotalSaidas());
-
                 System.out.println();
-
                 System.out.println("Acessos hoje      : " + dashboard.getAcessosHoje());
-
+                System.out.println("Usuário com mais acessos: "
+                    + dashboardService.usuarioComMaisAcessos());
                 System.out.println("=================================");
 
             break;

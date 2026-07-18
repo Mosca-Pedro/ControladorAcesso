@@ -1,12 +1,11 @@
 package repository;
 
 import database.Conexao;
-import model.Dashboard;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import model.Dashboard;
 
 public class DashboardRepository {
 
@@ -84,4 +83,34 @@ public class DashboardRepository {
 
         return 0;
     }
+
+    public String usuarioComMaisAcessos() {
+
+    String sql = """
+            SELECT u.nome, COUNT(*) AS total
+            FROM registros_acesso r
+            INNER JOIN usuarios u
+                ON r.usuario_id = u.id
+            GROUP BY u.nome
+            ORDER BY total DESC
+            LIMIT 1
+            """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            return rs.getString("nome") + " (" + rs.getInt("total") + " acessos)";
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao buscar usuário com mais acessos.");
+        System.out.println(e.getMessage());
+    }
+
+    return "Nenhum acesso registrado";
+}
+
 }

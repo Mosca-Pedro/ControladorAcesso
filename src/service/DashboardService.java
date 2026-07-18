@@ -18,4 +18,9 @@ public class DashboardService {
         return repository.obterDashboard();
 
     }
+
+    public String usuarioComMaisAcessos() {
+    return repository.usuarioComMaisAcessos();
+}
+
 }
