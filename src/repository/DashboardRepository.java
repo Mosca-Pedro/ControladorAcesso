@@ -198,4 +198,29 @@ public int saidasHoje() {
     return 0;
 }
 
+public int acessosUltimos7Dias() {
+
+    String sql = """
+            SELECT COUNT(*)
+            FROM registros_acesso
+            WHERE data_hora >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+            """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao buscar acessos dos últimos 7 dias.");
+        System.out.println(e.getMessage());
+    }
+
+    return 0;
+}
+
 }

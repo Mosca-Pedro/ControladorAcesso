@@ -34,5 +34,9 @@ public class DashboardService {
     public int saidasHoje() {
         return repository.saidasHoje();
     }
+    
+    public int acessosUltimos7Dias() {
+        return repository.acessosUltimos7Dias();
+    }
 
 }

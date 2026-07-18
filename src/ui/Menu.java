@@ -448,12 +448,15 @@ public class Menu {
                 System.out.println("Saídas hoje       : "
                     + dashboardService.saidasHoje());
 
+                System.out.println("Acessos (7 dias)  : "
+                    + dashboardService.acessosUltimos7Dias());
+
                 System.out.println("Usuário com mais acessos: "
                     + dashboardService.usuarioComMaisAcessos());
 
                 System.out.println("Último acesso      : "
                     + dashboardService.ultimoAcesso());
-                    
+
                 System.out.println("=================================");
 
             break;
