@@ -10,6 +10,7 @@ import model.Usuario;
 import repository.BancoDados;
 import repository.HistoricoRepository;
 import service.AcessoService;
+import service.AuditoriaService;
 import service.ControladorAcesso;
 import service.DashboardService;
 
@@ -26,6 +27,8 @@ public class Menu {
     AcessoService acessoService = new AcessoService();
 
     DashboardService dashboardService = new DashboardService();
+
+    AuditoriaService auditoriaService = new AuditoriaService();
 
     int tentativasLogin = 0;
 
@@ -115,7 +118,19 @@ public class Menu {
 
                     banco.cadastrarUsuario(usuario);
 
-                    break;
+                    String responsavel;
+
+                    if (usuarioLogado != null) {
+                        responsavel = usuarioLogado.getNome();
+                    } else {
+                        responsavel = "Sistema";
+                    }
+
+                    auditoriaService.registrar(
+                    responsavel,
+                    "Cadastrou o usuário " + usuario.getNome()
+                );
+                break;
 
 
                 case 2:
