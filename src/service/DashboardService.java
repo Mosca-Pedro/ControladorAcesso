@@ -31,4 +31,8 @@ public class DashboardService {
         return repository.entradasHoje();
     }
 
+    public int saidasHoje() {
+        return repository.saidasHoje();
+    }
+
 }

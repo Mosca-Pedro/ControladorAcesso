@@ -172,4 +172,30 @@ public int entradasHoje() {
     return 0;
 }
 
+public int saidasHoje() {
+
+    String sql = """
+            SELECT COUNT(*)
+            FROM registros_acesso
+            WHERE tipo = 'SAIDA'
+            AND DATE(data_hora) = CURDATE()
+            """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao contar saídas de hoje.");
+        System.out.println(e.getMessage());
+    }
+
+    return 0;
+}
+
 }
