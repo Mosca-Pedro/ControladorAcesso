@@ -27,4 +27,8 @@ public class DashboardService {
         return repository.ultimoAcesso();
     }
 
+    public int entradasHoje() {
+        return repository.entradasHoje();
+    }
+
 }

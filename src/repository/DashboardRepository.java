@@ -146,4 +146,30 @@ public String ultimoAcesso() {
     return "Nenhum acesso registrado";
 }
 
+public int entradasHoje() {
+
+    String sql = """
+            SELECT COUNT(*)
+            FROM registros_acesso
+            WHERE tipo = 'ENTRADA'
+            AND DATE(data_hora) = CURDATE()
+            """;
+
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement stmt = conexao.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+
+    } catch (SQLException e) {
+
+        System.out.println("Erro ao contar entradas de hoje.");
+        System.out.println(e.getMessage());
+    }
+
+    return 0;
+}
+
 }

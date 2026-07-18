@@ -441,6 +441,8 @@ public class Menu {
                 System.out.println("Saídas            : " + dashboard.getTotalSaidas());
                 System.out.println();
                 System.out.println("Acessos hoje      : " + dashboard.getAcessosHoje());
+                System.out.println("Entradas hoje     : "
+                    + dashboardService.entradasHoje());
                 System.out.println("Usuário com mais acessos: "
                     + dashboardService.usuarioComMaisAcessos());
                 System.out.println("Último acesso      : "
