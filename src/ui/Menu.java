@@ -32,6 +32,23 @@ public class Menu {
 
     int tentativasLogin = 0;
 
+    private boolean verificarPermissao(int opcao) {
+
+    if (usuarioLogado == null) {
+
+        System.out.println("Faça login primeiro.");
+        return false;
+    }
+
+    if (!controlador.temPermissao(usuarioLogado, opcao)) {
+
+        System.out.println("Você não possui permissão.");
+        return false;
+    }
+
+    return true;
+}
+
     public void exibirMenu() {
 
         int opcao;
@@ -52,7 +69,8 @@ public class Menu {
             System.out.println("9 - Buscar usuário");
             System.out.println("10 - Dashboard");
             System.out.println("11 - Recuperar senha");
-            System.out.println("12 - Sair");
+            System.out.println("12 - Ver auditoria");
+            System.out.println("13 - Sair");
            
 
             opcao = scanner.nextInt();
@@ -61,13 +79,9 @@ public class Menu {
 
                 case 1:
 
-                if (usuarioLogado != null &&
-                !controlador.temPermissao(usuarioLogado, 1)) {
-
-                    System.out.println("Você não possui permissão para cadastrar usuários.");
+                if (!verificarPermissao(1)) {
                     break;
                 }
-
                     scanner.nextLine();
 
                     System.out.print("ID: ");
@@ -163,6 +177,12 @@ public class Menu {
                         System.out.println("Nível: " + usuarioLogado.getNivelAcesso());
                         System.out.println("=================================");
 
+                        auditoriaService.registrar(
+                            usuarioLogado.getNome(),
+                            "Realizou login no sistema"
+                        );
+
+
                     } else {
 
                         tentativasLogin++;
@@ -186,12 +206,9 @@ public class Menu {
                 case 3:
 
 
-                    if (!controlador.temPermissao(usuarioLogado, 3)) {
-
-                        System.out.println("Você não possui permissão para listar usuários.");
-                        break;
-
-                    }
+                        if (!verificarPermissao(3)) {
+                            break;
+                        }
 
                         System.out.println("\n===== USUÁRIOS CADASTRADOS =====");
 
@@ -205,34 +222,36 @@ public class Menu {
 
                 case 4:
 
-                    if (usuarioLogado == null) {
-
-                        System.out.println("Faça login primeiro!");
-                    break;
-
-                }
-
+                    if (!verificarPermissao(4)) {
+                        break;
+                    }
 
                 acessoService.registrarEntrada(
                     usuarioLogado.getId()
                 );
 
 
+                    auditoriaService.registrar(
+                        usuarioLogado.getNome(),
+                         "Registrou entrada"
+                        );
                 break;
+
                 case 5:
 
-                    if (usuarioLogado == null) {
-
-                        System.out.println("Faça login primeiro!");
-                break;
-
-                }
+                    if (!verificarPermissao(5)) {
+                        break;
+                    }
 
 
                     acessoService.registrarSaida(
                         usuarioLogado.getId()
                     );
 
+                    auditoriaService.registrar(
+                        usuarioLogado.getNome(),
+                        "Registrou saída"
+                    );
 
                 break;
 
@@ -334,11 +353,8 @@ public class Menu {
                 case 7:
 
 
-                    if (!controlador.temPermissao(usuarioLogado, 7)) {
-
-                        System.out.println("Você não possui permissão para editar usuários.");
+                    if (!verificarPermissao(7)) {
                         break;
-
                     }
 
                     System.out.print("Digite o ID do usuário: ");
@@ -370,6 +386,11 @@ public class Menu {
                     if (atualizado) {
 
                         System.out.println("Usuário atualizado com sucesso!");
+                        
+                        auditoriaService.registrar(
+                            usuarioLogado.getNome(),
+                            "Editou o usuário " + usuarioEditar.getNome()
+                        );
 
                     } else {
 
@@ -383,16 +404,21 @@ public class Menu {
 
                 case 8:
 
-                    if (!controlador.temPermissao(usuarioLogado, 8)) {
-
-                        System.out.println("Você não possui permissão para excluir usuários.");
+                    if (!verificarPermissao(8)) {
                         break;
-
                     }
 
                     System.out.print("Digite o ID do usuário que deseja excluir: ");
                     int idExcluir = scanner.nextInt();
                     scanner.nextLine();
+
+                    Usuario usuarioExcluir = banco.buscarUsuarioPorId(idExcluir);
+
+                    if (usuarioExcluir == null) {
+
+                        System.out.println("Usuário não encontrado.");
+                        break;
+                    }
 
                     boolean removido = banco.excluirUsuario(idExcluir);
 
@@ -400,21 +426,22 @@ public class Menu {
 
                         System.out.println("Usuário excluído com sucesso!");
 
-                    }else {
+                        auditoriaService.registrar(
+                            usuarioLogado.getNome(),
+                            "Excluiu o usuário " + usuarioExcluir.getNome()
+                        );
 
-                        System.out.println("Usuário não encontrado.");
+                        } else {
 
-                    }
+                            System.out.println("Erro ao excluir usuário.");
+                        }
 
-                    break;
+                break;
 
                 case 9:
 
-                    if (!controlador.temPermissao(usuarioLogado, 9)) {
-
-                        System.out.println("Você não possui permissão para buscar usuários.");
+                   if (!verificarPermissao(9)) {
                         break;
-
                     }
 
                     System.out.print("Digite o ID do usuário: ");
@@ -516,6 +543,12 @@ public class Menu {
 
                     System.out.println("Senha redefinida com sucesso!");
 
+                    auditoriaService.registrar(
+                        "Sistema",
+                        "Redefiniu a senha do usuário " + usuarioRecuperacao.getNome()
+                    );
+
+
                 } else {
 
                     System.out.println("Erro ao redefinir senha.");
@@ -525,6 +558,22 @@ public class Menu {
                 break;
 
 
+                case 12:
+
+                if (!verificarPermissao(12)) {
+                    break;
+                }
+
+                auditoriaService.listarAuditoria();
+
+                break;
+
+                case 13:
+
+                    System.out.println("Sistema encerrado.");
+                    break;
+
+
         default:
             System.out.println("Opção inválida.");
             break;  
@@ -532,7 +581,7 @@ public class Menu {
 
     }
 
-        } while (opcao != 12);
+        } while (opcao != 13);
     }
 
 }

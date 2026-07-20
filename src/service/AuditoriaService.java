@@ -1,9 +1,8 @@
 package service;
 
+import java.time.LocalDateTime;
 import model.Auditoria;
 import repository.AuditoriaRepository;
-
-import java.time.LocalDateTime;
 
 public class AuditoriaService {
 
@@ -24,4 +23,11 @@ public class AuditoriaService {
 
         repository.registrar(auditoria);
     }
+
+    public void listarAuditoria() {
+
+        repository.listarAuditoria();
+
+    }
+
 }
